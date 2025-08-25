@@ -12,12 +12,11 @@ const Rooms = () => {
   const [params,setparams]=useSearchParams();
   const axiosCommon=UseAxiosCommon();
   const category=params.get('category');
-  console.log(category)
   const {data:rooms=[],isLoading}=useQuery({
     queryKey:['rooms',category],
     queryFn:async()=>{
      const {data}=await axiosCommon.get(`/rooms/?category=${category}`)
-     return data
+     return data;
     }
   })
   if (isLoading) return <LoadingSpinner />
