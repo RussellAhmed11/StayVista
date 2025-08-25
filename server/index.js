@@ -36,7 +36,8 @@ const verifyToken = async (req, res, next) => {
   })
 }
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@main.mq0mae1.mongodb.net/?retryWrites=true&w=majority&appName=Main`
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hn7k2u4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -47,6 +48,7 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
+    const roomCollection=client.db('stayVista').collection('rooms')
     // auth related api
     app.post('/jwt', async (req, res) => {
       const user = req.body
@@ -60,6 +62,21 @@ async function run() {
           sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         })
         .send({ success: true })
+    })
+    // get all rooms
+    app.get('/rooms',async(req,res)=>{
+      const category=req.query.category;
+      let query={};
+      if(category && category!=='null') query={category};
+      const result=await roomCollection.find(query).toArray();
+      res.send(result)
+    })
+    // get single room data
+    app.get('/room/:id',async(req,res)=>{
+      const id=req.params.id;
+      const query={_id:new ObjectId(id)}
+      const result=await roomCollection.findOne(query);
+      res.send(result);
     })
     // Logout
     app.get('/logout', async (req, res) => {
