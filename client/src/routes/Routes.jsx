@@ -6,6 +6,11 @@ import Login from '../pages/Login/Login'
 import SignUp from '../pages/SignUp/SignUp'
 import RoomDetails from '../pages/RoomDetails/RoomDetails'
 import PrivateRoute from './PrivateRoute'
+import DashboardLayout from '../layouts/DashboardLayout'
+import Sidebar from '../components/Dashboard/Sidebar.jsx/Sidebar'
+import Statics from '../components/Dashboard/Common/Statics'
+import AddRoom from '../components/Dashboard/Hoast/AddRoom'
+import MyListing from '../components/Dashboard/Hoast/MyListing'
 
 
 export const router = createBrowserRouter([
@@ -26,4 +31,26 @@ export const router = createBrowserRouter([
   },
   { path: '/login', element: <Login /> },
   { path: '/signup', element: <SignUp /> },
+  { 
+    path:('/dashboard'),
+    element:<DashboardLayout/>,
+    children:[
+      {
+         // index: true can be use 
+        path:'/dashboard',
+       
+        element:<Statics></Statics>
+      },
+      {
+        path:'addroom',
+        element:<AddRoom></AddRoom>
+      },
+      {
+        path:'mylisting',
+        element:<MyListing></MyListing>
+      },
+    ]
+   
+    
+   },
 ])

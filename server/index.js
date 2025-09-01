@@ -71,12 +71,31 @@ async function run() {
       const result=await roomCollection.find(query).toArray();
       res.send(result)
     })
+    app.post('/room',async(req,res)=>{
+      const roomData=req.body;
+      const result=await roomCollection.insertOne(roomData);
+      res.send(result)
+    })
     // get single room data
     app.get('/room/:id',async(req,res)=>{
       const id=req.params.id;
       const query={_id:new ObjectId(id)}
       const result=await roomCollection.findOne(query);
       res.send(result);
+    })
+    app.get('/my-listing/:email',async(req,res)=>{
+        const email=req.params.email;
+        const query={'host.email':email};
+        const result=await roomCollection.find(query).toArray();
+        res.send(result); 
+    })
+    // delete room
+    app.delete('/room/:id',async(req,res)=>{
+     const id=req?.params?.id;
+     console.log(id)
+     const query={_id:new ObjectId(id)};
+     const result=roomCollection.deleteOne(query);
+     res.send(result);
     })
     // Logout
     app.get('/logout', async (req, res) => {

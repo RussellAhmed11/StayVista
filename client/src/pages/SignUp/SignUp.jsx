@@ -5,6 +5,7 @@ import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TbFidgetSpinner, TbFridgeOff } from "react-icons/tb";
+import { imageUpload } from '../../Api/Utils';
 const SignUp =() => {
   const location=useLocation();
   const { createUser, signInWithGoogle, updateUserProfile,loading,setLoading} = useAuth();
@@ -18,17 +19,16 @@ const SignUp =() => {
     const email = form.email.value;
     const password = form.password.value;
     const image = form.image.files[0];
-    const formData = new FormData();
-    formData.append('image',image)
+  
     try {
       //  upload image get url
-      const { data } =await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`,formData);
+      const image_url=await imageUpload(image);
     
       // user registration
       await createUser(email,password)
       
       // update user profile
-      await updateUserProfile(name,data.data.display_url);
+      await updateUserProfile(name,image_url);
       navigate(from)
      toast.success("Successfully signup!");
     } catch (err) {
