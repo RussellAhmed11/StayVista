@@ -3,7 +3,7 @@ const app = express()
 require('dotenv').config()
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb')
+const { MongoClient, ServerApiVersion, ObjectId, Timestamp } = require('mongodb')
 const jwt = require('jsonwebtoken')
 
 const port = process.env.PORT || 8000
@@ -49,6 +49,7 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const roomCollection=client.db('stayVista').collection('rooms')
+    const usersCollection=client.db('stayVista').collection('users')
     // auth related api
     app.post('/jwt', async (req, res) => {
       const user = req.body
@@ -62,6 +63,47 @@ async function run() {
           sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         })
         .send({ success: true })
+    })
+     app.get('/logout', async (req, res) => {
+      try {
+        res
+          .clearCookie('token', {
+            maxAge: 0,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+          })
+          .send({ success: true })
+        console.log('Logout successful')
+      } catch (err) {
+        res.status(500).send(err)
+      }
+    })
+    app.put('/user',async(req,res)=>{
+      const user=req.body;
+       const query={email:user?.email}
+      const isExist=await usersCollection.findOne({email:user?.email});
+      if(isExist) {
+        if(user?.status ==='Requested'){
+          const result=await usersCollection.updateOne(query,{$set:{status:user?.status}})
+          return req.sen(result)
+      }else{
+         return res.send(isExist)
+        }
+      }
+      const options={upsert:true}
+      const updateDoc={
+        $set:{
+          ...user,
+          timeStamp:Date.now()
+        }
+      }
+      const result=await usersCollection.updateOne(query,updateDoc,options);
+      res.send(result);
+    })
+    // get all user data
+    app.get('/users',async(req,res)=>{
+      const users=await usersCollection.find().toArray();
+      res.send(users)
     })
     // get all rooms
     app.get('/rooms',async(req,res)=>{
@@ -92,26 +134,12 @@ async function run() {
     // delete room
     app.delete('/room/:id',async(req,res)=>{
      const id=req?.params?.id;
-     console.log(id)
      const query={_id:new ObjectId(id)};
      const result=roomCollection.deleteOne(query);
      res.send(result);
     })
     // Logout
-    app.get('/logout', async (req, res) => {
-      try {
-        res
-          .clearCookie('token', {
-            maxAge: 0,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-          })
-          .send({ success: true })
-        console.log('Logout successful')
-      } catch (err) {
-        res.status(500).send(err)
-      }
-    })
+   
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 })
