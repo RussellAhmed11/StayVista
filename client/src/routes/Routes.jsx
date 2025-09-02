@@ -7,10 +7,12 @@ import SignUp from '../pages/SignUp/SignUp'
 import RoomDetails from '../pages/RoomDetails/RoomDetails'
 import PrivateRoute from './PrivateRoute'
 import DashboardLayout from '../layouts/DashboardLayout'
-import Sidebar from '../components/Dashboard/Sidebar.jsx/Sidebar'
+import Sidebar from '../components/Dashboard/Sidebar/Sidebar'
 import Statics from '../components/Dashboard/Common/Statics'
 import AddRoom from '../components/Dashboard/Hoast/AddRoom'
 import MyListing from '../components/Dashboard/Hoast/MyListing'
+import Profile from '../components/Dashboard/Common/Profile'
+import ManageUser from '../components/Dashboard/Admin/ManageUser'
 
 
 export const router = createBrowserRouter([
@@ -49,6 +51,14 @@ export const router = createBrowserRouter([
         path:'mylisting',
         element:<MyListing></MyListing>
       },
+      {
+        path:'manage-users',
+        element:<ManageUser/>
+      },
+      {
+        path:'profile',
+        element:<Profile/>
+      }
     ]
    
     

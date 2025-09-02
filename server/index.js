@@ -100,10 +100,28 @@ async function run() {
       const result=await usersCollection.updateOne(query,updateDoc,options);
       res.send(result);
     })
+    // get all user info
+    app.get('/user/:email',async(req,res)=>{
+      const email=req?.params?.email;
+      const result=await usersCollection.findOne({email});
+      res.send(result);
+    })
     // get all user data
     app.get('/users',async(req,res)=>{
       const users=await usersCollection.find().toArray();
       res.send(users)
+    })
+    app.patch('/users/update/:email',async(req,res)=>{
+      const email=req?.params?.email; 
+      const user=req?.body;
+      const query={email:email};
+      const updateDoc={
+        $set:{
+          ...user,timeStamp:Date.now()
+        }
+      }
+      const result=await usersCollection.updateOne(query,updateDoc)
+      res.send(result)
     })
     // get all rooms
     app.get('/rooms',async(req,res)=>{
