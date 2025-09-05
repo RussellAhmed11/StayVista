@@ -10,17 +10,16 @@ const UserDataRow = ({ user, refetch }) => {
      const [IsOpen,setIsopen]=useState(false);
      const {mutateAsync}=useMutation({
       mutationFn:async role=>{
-        const {data}=await axiosSecure.patch(`/users/update/${loggedUser?.email}`,role)
+        const {data}=await axiosSecure.patch(`/users/update/${user?.email}`,role)
         return data
       },onSuccess:data=>{
-        console.log(data);
-        toast.success("User role update successfully")
         refetch()
+        toast.success("User role update successfully")
         setIsopen(false)
       }
      })
      const handlemodel=async(selected)=>{
-        if(loggedUser.email ===user?.email){
+        if(loggedUser?.email ===user?.email){
             toast.error('Action Not Allowed')
            return setIsopen(false)
         }

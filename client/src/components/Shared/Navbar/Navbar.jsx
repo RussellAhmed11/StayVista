@@ -21,7 +21,7 @@ const handleHoastModal=async()=>{
     const currentUser={
       email:user?.email,
       role:'guest',
-      status:'requested'
+      status:'Requested'
     }
     const {data}=await axiosSecure.put(`/user`,currentUser)
     if(data.modifiedCount>0){
@@ -51,7 +51,7 @@ const handleHoastModal=async()=>{
                 height='100'
               />
             </Link>
-            {/* Dropdown Menu */}
+          
             <div className='relative'>
               <div className='flex flex-row items-center gap-3'>
                 {/* Become A Host btn */}

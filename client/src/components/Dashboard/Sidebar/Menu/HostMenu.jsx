@@ -6,7 +6,7 @@ const HostMenu = () => {
   return (
     <>
       <MenuItem icon={BsFillHouseAddFill} label='Add Room' address='add-room' />
-      <MenuItem icon={MdHomeWork} label='My Listings' address='my-listings' />
+      <MenuItem icon={MdHomeWork} label='My Listings' address='my-listing' />
       <MenuItem
         icon={MdOutlineManageHistory}
         label='Manage Bookings'

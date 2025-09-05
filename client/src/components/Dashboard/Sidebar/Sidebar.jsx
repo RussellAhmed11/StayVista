@@ -14,16 +14,23 @@ import MenuItem from '../../../hooks/MenuItem'
 import HostMenu from './Menu/HostMenu'
 import AdminMenu from './Menu/AdminMenu'
 import GuestMenu from './Menu/GuestMenu'
+import ToggleBtn from '../../Shared/Button/ToggleBtn'
 
 const Sidebar = () => {
   const { logOut } = useAuth()
   const [role,isLoading]=UseRole();
-  console.log(role,isLoading)
+  
   const [isActive, setActive] = useState(false)
-
+const [toggle,settoggle]=useState(true)
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive)
+  }
+  const togglehandler=(e)=>{
+    
+    settoggle(!toggle)
+
+   
   }
   return (
     <>
@@ -42,7 +49,6 @@ const Sidebar = () => {
             </Link>
           </div>
         </div>
-
         <button
           onClick={handleToggle}
           className='mobile-menu-button p-4 focus:outline-none focus:bg-gray-200'
@@ -71,10 +77,12 @@ const Sidebar = () => {
               </Link>
             </div>
           </div>
-
           {/* Nav Items */}
           <div className='flex flex-col justify-between flex-1 mt-6'>
             {/* Conditional toggle button here.. */}
+            {
+              role==='host' && <ToggleBtn togglehandler={togglehandler} toggle={toggle}/>
+            }
 
             {/*  Menu Items */}
             <nav>
@@ -84,16 +92,16 @@ const Sidebar = () => {
                 role ==='guest' && <GuestMenu/>
               }
               {
-                role ==='host' && <HostMenu/>
+                role ==='host' ? toggle ? <HostMenu/>:<GuestMenu/>:undefined
               }
               {
                 role ==='admin' && <AdminMenu/>
               }
               {/* Add Room */}
-              <MenuItem label='Add Room' address='addroom' icon={BsFillHouseAddFill}/>
+              {/* <MenuItem label='Add Room' address='addroom' icon={BsFillHouseAddFill}/>
               
               {/* My Listing */}
-              <MenuItem label='My listing' address='mylisting' icon={MdHomeWork}/>
+              {/* <MenuItem label='My listing' address='mylisting' icon={MdHomeWork}/>  */}
               
             </nav>
           </div>
