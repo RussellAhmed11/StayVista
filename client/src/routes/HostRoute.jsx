@@ -10,8 +10,7 @@ const HostRoute = ({children}) => {
     return <Navigate to='/dashboard'/>;  
 };
 
-
-export default HostRoute;
-HostRoute.PropTypes ={
-    children: PropTypes.element
+HostRoute.propTypes = {
+  children: PropTypes.element,
 }
+export default HostRoute;

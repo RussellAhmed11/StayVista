@@ -49,8 +49,8 @@ export const router = createBrowserRouter([
         element:<PrivateRoute><Statics></Statics></PrivateRoute>
       },
       {
-        path:'addroom',
-        element:<PrivateRoute><HostMenu><AddRoom></AddRoom></HostMenu></PrivateRoute>
+        path:'add-room',
+        element:<PrivateRoute><HostRoute><AddRoom></AddRoom></HostRoute></PrivateRoute>
       },
       {
         path:'my-listing',

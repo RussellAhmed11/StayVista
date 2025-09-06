@@ -9,8 +9,7 @@ const AdminRoute = ({children}) => {
     if(role ==='admin') return children
     return <Navigate to='/dashboard'/>;
 };
-
-export default AdminRoute;
 AdminRoute.propTypes = {
   children: PropTypes.element,
 }
+export default AdminRoute;
