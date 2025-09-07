@@ -233,6 +233,72 @@ async function run() {
       const result = await bookingsCollection.deleteOne(query)
       res.send(result)
     })
+// admin stat
+    app.get('/admin-stat',verifyToken,verifyAdmin,async(req,res)=>{
+      const bookingDetails=await bookingsCollection.find({},{
+        projection:{
+          date:1,
+          price:1
+        }
+      }).toArray()
+      const totalRooms=await roomCollection.countDocuments()
+      const totalUsers=await usersCollection.countDocuments()
+      const totalPrice=bookingDetails.reduce((sum,booking)=>sum+booking?.price,0)
+      const chartData=bookingDetails.map(booking=>{
+        const day=new Date(booking.date).getDate()
+        const month=new Date(booking.date).getMonth()+1
+        const data=[`${day}/${month}`,booking?.price]
+        return data
+      })
+      chartData.unshift(['Day','Sales'])
+      // chartData.splice(0,0,['Day','Sales'])
+
+      res.send({totalRooms,totalUsers,totalBookings:bookingDetails?.length,totalPrice,chartData})
+    })
+    app.get('/host-stat',verifyToken,verifyHost,async(req,res)=>{
+      const {email}=req.user
+      const bookingDetails=await bookingsCollection.find({ 'host.email': email },{
+        projection:{
+          date:1,
+          price:1
+        }
+      }).toArray()
+      const totalRooms=await roomCollection.countDocuments({ 'host.email': email })
+      const totalPrice=bookingDetails.reduce((sum,booking)=>sum+booking?.price,0)
+      const {timeStamp}=await usersCollection.findOne({email},{projection:{timeStamp:1}})
+      const chartData=bookingDetails.map(booking=>{
+        const day=new Date(booking.date).getDate()
+        const month=new Date(booking.date).getMonth()+1
+        const data=[`${day}/${month}`,booking?.price]
+        return data
+      })
+      chartData.unshift(['Day','Sales'])
+      // chartData.splice(0,0,['Day','Sales'])
+
+      res.send({totalRooms,totalBookings:bookingDetails?.length,totalPrice,chartData,hostSince:timeStamp})
+    })
+    app.get('/guest-stat',verifyToken,async(req,res)=>{
+      const {email}=req.user
+      const bookingDetails=await bookingsCollection.find({ 'guest.email': email },{
+        projection:{
+          date:1,
+          price:1
+        }
+      }).toArray()
+      const totalPrice=bookingDetails.reduce((sum,booking)=>sum+booking?.price,0)
+      const {timeStamp}=await usersCollection.findOne({email},{projection:{timeStamp:1}})
+      const chartData=bookingDetails.map(booking=>{
+        const day=new Date(booking.date).getDate()
+        const month=new Date(booking.date).getMonth()+1
+        const data=[`${day}/${month}`,booking?.price]
+        return data
+      })
+      chartData.unshift(['Day','Sales'])
+      // chartData.splice(0,0,['Day','Sales'])
+
+      res.send({totalBookings:bookingDetails?.length,totalPrice,chartData,guestSince:timeStamp})
+    })
+   
 
     // Send a ping to confirm a successful connection
     await client.db('admin').command({ ping: 1 })
