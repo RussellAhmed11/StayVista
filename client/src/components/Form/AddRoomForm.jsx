@@ -57,6 +57,7 @@ const AddRoomForm = ({
                 editableDateInputs={true}
                 onChange={item => handleDates(item)}
                 moveRangeOnFirstSelection={false}
+                mindate={(new Date())}
                 ranges={[dates]}
               />
             </div>
