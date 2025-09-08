@@ -1,11 +1,5 @@
 # stayVista-starter-template
-- [Live Website link](https://stayviste.web.app/)
-
-
-### Important Links:
-
-- [StayVista Resources](https://github.com/shakilahmedatik/b9-stayVista-resources)
-- [Project Requirement Doc](https://docs.google.com/document/d/1rzueKvZTinMb3XY7cuDNH0S0d_l8CflG1H95VUi2Dto/edit?usp=sharing)
+- [Live Website link](https://jerin-s-parlour-842a7.web.app/))
 
   
 
