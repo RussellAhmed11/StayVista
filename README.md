@@ -1,7 +1,7 @@
 # stayVista-starter-template
-- [Live Website link](https://jerin-s-parlour-842a7.web.app/))
-
-  ## 🚀 Features
+- [Live Website link](https://stayviste.web.app)
+-
+-     ## 🚀 Features
 
 - **Authentication & Authorization**
   - Register/Login with email & password  
